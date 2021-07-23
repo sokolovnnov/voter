@@ -2,17 +2,26 @@ package ru.antisida.voter.web;
 
 import org.springframework.stereotype.Controller;
 import ru.antisida.voter.model.Restaurant;
+import ru.antisida.voter.service.MealService;
+import ru.antisida.voter.service.MenuService;
 import ru.antisida.voter.service.RestaurantService;
+import ru.antisida.voter.to.Menu;
 
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
 public class RestaurantController {
 
-private final RestaurantService service;
 
-    public RestaurantController(RestaurantService service) {
+    private final RestaurantService service;
+    private final MenuService menuService;
+
+
+    public RestaurantController(RestaurantService service, MenuService menuService) {
         this.service = service;
+        this.menuService = menuService;
     }
 
     public Restaurant get(int id) {
@@ -27,6 +36,7 @@ private final RestaurantService service;
         service.delete(id, 1);//fixme userId
     }
 
+//    @GetMapping("/restaurants")
     public List<Restaurant> getAll() {
 //        int userId = SecurityUtil.authUserId();
 //        log.info("getAll for user {}", userId);
@@ -47,6 +57,16 @@ private final RestaurantService service;
 //        log.info("update {} for user {}", meal, userId);
         service.update(restaurant, 1);//fixme userId
     }
+
+/*
+    public HashSet<Menu> getMenusByDate(int userId, LocalDate ld){
+        return menuService.getAllByDate(userId, ld);
+    }
+*/
+
+//    public Menu getMenuByDateAndRestaurant(int userId, int restaurantId/*, LocalDate ld*/){//todo  c датой что то сдалать
+//        return mealService.getMenuByDateAndRestaurant(userId, restaurantId);
+//    }
 
 
 }

@@ -1,6 +1,6 @@
 package ru.antisida.voter.web;
 
-import org.springframework.context.ConfigurableApplicationContext;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.ServletException;
@@ -8,21 +8,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class RestaurantServlet  extends HttpServlet {
 
     private ClassPathXmlApplicationContext springContext;
-    private RestaurantController controller;
+    private RestaurantController restaurantController;
+    private MenuController menuController;
+    private VoteController voteController;
 
     @Override
     public void init() throws ServletException {
         springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
-        controller = springContext.getBean(RestaurantController.class);
+        restaurantController = springContext.getBean(RestaurantController.class);
+        menuController = springContext.getBean(MenuController.class);
+        voteController = springContext.getBean(VoteController.class);
     }
 
     @Override
     public void destroy() {
-        springContext.close();
+   //     springContext.close();
         super.destroy();
     }
 
@@ -46,7 +51,9 @@ public class RestaurantServlet  extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        request.setAttribute("restaurants", controller.getAll());
+        request.setAttribute("lastvote", voteController.getLastByUser(12000));
+        request.setAttribute("restaurants", restaurantController.getAll());
+        request.setAttribute("menus", menuController.getAllByDate(12000, LocalDate.now()));//fixme date
         request.getRequestDispatcher("/restaurants.jsp").forward(request, response);
 
      /*   switch (action == null ? "all" : action) {

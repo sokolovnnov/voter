@@ -1,10 +1,8 @@
 package ru.antisida.voter.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -16,13 +14,27 @@ public class Restaurant extends AbstractBaseEntity {
     @NotEmpty
     private String name;
 
-//    @OneToMany//todo доделать
-//    private List<Meal> meals;
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)//todo доделать
+    //@JoinColumn(name = "restaurant_id") //fixme ЗАЧЕМ ресторану его еда?
+    private List<Meal> meals;
 //
-//    private Integer voteSum;
+//    private Integer voteSum;//todo сумма сегодняшних голосов она тут не нужна
 //
-//    @OneToMany()//todo...
+//    @OneToMany(fetch = FetchType.LAZY)//todo... ЗАЧЕМ РЕСТОРАНУ ЕГО ГОЛОСА???
+//    @JoinColumn(name = "restaurant_id")
 //    private List<Vote> vote;
+
+    public Restaurant(){}
+
+    public Restaurant(@NotNull Integer id,  @NotEmpty String name) {
+        super(id);
+        this.name = name;
+    }
+
+    public Restaurant(Restaurant restaurant){
+        this.name = restaurant.name;
+        this.id = restaurant.id;
+    }
 
     public String getName() {
         return name;

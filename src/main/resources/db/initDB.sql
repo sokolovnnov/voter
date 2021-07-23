@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS global_seq;
 
 
-CREATE SEQUENCE global_seq START WITH 1000;
+CREATE SEQUENCE global_seq START WITH 2000;
 
 CREATE TABLE users
 (
@@ -30,12 +30,15 @@ CREATE TABLE user_roles
 CREATE TABLE restaurants
 (
     id   INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+--     creator_id INTEGER NOT NULL,
     name VARCHAR NOT NULL
 );
 
 CREATE TABLE meals
 (
     id            INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+--     creator_id    INTEGER   NOT NULL,
+    date          DATE    NOT NULL,
     restaurant_id INTEGER NOT NULL,
     name          VARCHAR NOT NULL,
     price         INTEGER NOT NULL,
@@ -44,11 +47,19 @@ CREATE TABLE meals
 
 CREATE TABLE votes
 (
-    id        INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('global_seq'),
-    date_time TIMESTAMP DEFAULT now(),
-    user_id INTEGER NOT NULL ,
+    id            INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('global_seq'),
+    is_active     BOOLEAN,
+    date_time     TIMESTAMP                    DEFAULT now(),
+    user_id       INTEGER NOT NULL,
     restaurant_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (restaurant_id) references restaurants(id)
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (restaurant_id) references restaurants (id) ON DELETE CASCADE
 );
+
+-- CREATE TABLE roles
+-- (
+--     role    VARCHAR,
+--     user_id INTEGER NOT NULL,
+--     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+-- );
 
