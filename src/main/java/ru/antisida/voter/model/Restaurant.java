@@ -1,5 +1,8 @@
 package ru.antisida.voter.model;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -7,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "restaurants")
 //todo uniqueConstraints
 public class Restaurant extends AbstractBaseEntity {

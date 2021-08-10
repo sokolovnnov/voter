@@ -1,9 +1,7 @@
 package ru.antisida.voter.service;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import ru.antisida.voter.UserTestData;
 import ru.antisida.voter.model.Vote;
 import ru.antisida.voter.util.NotFoundException;
@@ -18,14 +16,6 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
     private VoteService service;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Before
-    public void setup() {
-        cacheManager.getCache("vote").clear();
-    }
 
     @Test
     public void get() {
