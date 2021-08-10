@@ -1,5 +1,7 @@
 package ru.antisida.voter.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ru.antisida.voter.model.Vote;
 import ru.antisida.voter.repo.datajpa.DataJpaVoteRepo;
@@ -23,18 +25,22 @@ public class VoteService {
         return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
+    @CacheEvict(value = "vote", allEntries = true)
     public void deactivate(int id, int userId){
         checkNotFoundWithId(repository.deactivate(id, userId), id);
     }
 
+    @CacheEvict(value = "vote", allEntries = true)
     public Vote create(Vote vote, int userId){
         return repository.save(vote, userId);
     }
 
+    @CacheEvict(value = "vote", allEntries = true)
     public void delete(int id, int userId){
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
+    @Cacheable("vote")
     public List<Vote> getAllByUser(int userId){
         return repository.getAllByUser(userId);
     }
@@ -47,6 +53,7 @@ public class VoteService {
         return repository.getLastByUser(userId);
     }
 
+    @Cacheable("vote")
     public List<Vote> getAll(int userId){
         return repository.getAll();
     }

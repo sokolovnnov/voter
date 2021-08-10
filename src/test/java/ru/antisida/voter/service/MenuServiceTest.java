@@ -1,8 +1,10 @@
 package ru.antisida.voter.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -26,10 +28,22 @@ public class MenuServiceTest {
     @Autowired
     private MenuService service;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before
+    public void setup() {
+        cacheManager.getCache("dateMenu").clear();
+        cacheManager.getCache("restaurantMenu").clear();
+        cacheManager.getCache("menu").clear();
+    }
+
     @Test
     public void getAllByDate() {
         List<Menu> menuList = service.getAllByDate(LocalDate.of(2020, Month.JANUARY, 30));
         MATCHER.assertMatch(menuList, restaurant01Menu, restaurant02Menu);
+//        List<Menu> menuList1 = service.getAllByDate(LocalDate.of(2020, Month.JANUARY, 30));
+//        MATCHER.assertMatch(menuList1, restaurant01Menu, restaurant02Menu);
     }
 
     @Test

@@ -1,8 +1,10 @@
 package ru.antisida.voter.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -27,6 +29,14 @@ public class VoteServiceTest {
 
     @Autowired
     private VoteService service;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before
+    public void setup() {
+        cacheManager.getCache("vote").clear();
+    }
 
     @Test
     public void get() {
@@ -53,8 +63,11 @@ public class VoteServiceTest {
 
     @Test
     public void delete() {
+//        List<Vote> votes1 = service.getAll(UserTestData.admin.id()); //для проверки работы кэша
         service.delete(vote01.id(), UserTestData.user.id());
         assertThrows(NotFoundException.class, () -> service.get(vote01.id(), UserTestData.user.id()));
+//        List<Vote> votes = service.getAll(UserTestData.admin.id());
+//        MATCHER.assertMatch(votes, vote01, vote02, vote03);
     }
 
     @Test
