@@ -1,13 +1,17 @@
 package ru.antisida.voter.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "votes")
 public class Vote extends AbstractBaseEntity {
 
-    @Column(name = "date_time")
+    @NotNull
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime localDateTime;
 
     @Column(name = "is_active")
@@ -26,17 +30,15 @@ public class Vote extends AbstractBaseEntity {
 //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "user_id")
 //    private User user;
-
-
     public Vote() {
     }
 
     public Vote(Integer id, LocalDateTime localDateTime, int restaurantId, int userId, boolean isActive) {
         super(id);
         this.localDateTime = localDateTime;
-        this.isActive = isActive;
         this.restaurantId = restaurantId;
         this.userId = userId;
+        this.isActive = isActive;
     }
 
     public Vote(Vote vote){

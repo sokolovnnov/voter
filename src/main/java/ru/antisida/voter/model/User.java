@@ -5,6 +5,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -13,12 +17,17 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends AbstractBaseEntity{
 
+    @NotBlank
+    @Size(min = 1, max = 30)
     @Column(name = "name")
     private String name;
 
+    @Email
+    @NotBlank
     @Column(name = "e_mail")
     private String email;
 
+    @NotNull
     @Column(name = "date_time_reg")
     private LocalDateTime dateTimeReg;
 

@@ -1,6 +1,7 @@
 package ru.antisida.voter.util;
 
-import ru.antisida.voter.model.AbstractBaseEntity;
+import org.springframework.core.NestedExceptionUtils;
+import org.springframework.lang.NonNull;
 
 public class ValidationUtil {
     private ValidationUtil() {
@@ -24,6 +25,12 @@ public class ValidationUtil {
         if (!found) {
             throw new NotFoundException("Not found entity with " + msg);
         }
+    }
+
+    @NonNull
+    public static Throwable getRootCause(@NonNull Throwable t) {
+        Throwable rootCause = NestedExceptionUtils.getRootCause(t);
+        return rootCause != null ? rootCause : t;
     }
 
 /*

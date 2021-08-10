@@ -2,13 +2,8 @@ package ru.antisida.voter.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 import ru.antisida.voter.to.Menu;
 
 import java.time.LocalDate;
@@ -17,13 +12,8 @@ import java.util.List;
 
 import static ru.antisida.voter.MenuTestData.*;
 
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class MenuServiceTest {
+
+public class MenuServiceTest extends AbstractServiceTest {
 
     @Autowired
     private MenuService service;

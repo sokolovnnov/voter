@@ -2,9 +2,7 @@ package ru.antisida.voter.model;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
@@ -18,13 +16,15 @@ public class Meal extends AbstractBaseEntity {
     private LocalDate date;
 
     @Column(name = "name")
-    @NotEmpty
+    @NotBlank
+    @Size(min = 2, max = 30)
     private String name;
 
     @Column(name = "price")
     @Min(0)//todo convert to Rub
     private Integer price;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)//fixme maybe. А нужна ли здесь связь двусторонняя
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;

@@ -2,30 +2,19 @@ package ru.antisida.voter.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 import ru.antisida.voter.UserTestData;
 import ru.antisida.voter.model.Vote;
 import ru.antisida.voter.util.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
 import static ru.antisida.voter.VoteTestData.*;
 
-
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class VoteServiceTest {
+public class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
     private VoteService service;
@@ -91,5 +80,13 @@ public class VoteServiceTest {
     public void getAll() {
         List<Vote> votes = service.getAll(UserTestData.admin.id());
         MATCHER.assertMatch(votes, vote01, vote02, vote03);
+    }
+
+    @Test
+    public void createWithException() throws Exception {
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Vote(null, null,
+//                LocalDateTime.of(2021, Month.MAY, 21, 11, 57, 17),
+                10_000, UserTestData.user.id(), true ), UserTestData.user.id()));
+
     }
 }

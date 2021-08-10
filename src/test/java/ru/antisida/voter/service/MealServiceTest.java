@@ -1,17 +1,13 @@
 package ru.antisida.voter.service;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 import ru.antisida.voter.RestaurantsTestData;
 import ru.antisida.voter.UserTestData;
 import ru.antisida.voter.model.Meal;
 import ru.antisida.voter.util.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -19,13 +15,8 @@ import java.util.List;
 import static org.junit.Assert.assertThrows;
 import static ru.antisida.voter.MealTestData.*;
 
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class MealServiceTest {
+
+public class MealServiceTest extends AbstractServiceTest {
 
     @Autowired
     private MealService service;
@@ -66,5 +57,17 @@ public class MealServiceTest {
     public void getAllByRestaurant() {
         List<Meal> mealList = service.getAllByRestaurant(RestaurantsTestData.Restaurant1Id);
         MATCHER.assertMatch(mealList, meal01, meal02, meal03);
+    }
+
+    @Test
+    public void createWithException() throws Exception {
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Meal(null, null,
+                "sfsdf", 1 , RestaurantsTestData.restaurant_1), UserTestData.userId));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Meal(null,
+                LocalDate.of(2021, Month.MAY, 21),
+                "", 1 , RestaurantsTestData.restaurant_1), UserTestData.userId));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Meal(null,
+                LocalDate.of(2021, Month.MAY, 21),
+                "asdf", 1 , null), UserTestData.userId));
     }
 }

@@ -1,6 +1,7 @@
 package ru.antisida.voter.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class Restaurant extends AbstractBaseEntity {
 
     @Column(name = "name")
-    @NotEmpty
+    @NotBlank
     private String name;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)//todo доделать
