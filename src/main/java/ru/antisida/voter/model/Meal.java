@@ -4,7 +4,10 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -35,7 +38,7 @@ public class Meal extends AbstractBaseEntity {
     public Meal() {
     }
 
-    public Meal(Integer id, @NotNull LocalDate date, @NotEmpty String name, @Min(0) Integer price,
+    public Meal(Integer id, @NotNull LocalDate date, @NotBlank String name, @Min(0) Integer price,
                 Restaurant restaurant) {
         super(id);
         this.date = date;

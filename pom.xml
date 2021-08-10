@@ -18,7 +18,7 @@
         <tomcat.version>9.0.43</tomcat.version>
 
         <!--    Tests  -->
-        <junit.version>4.13.2</junit.version>
+        <junit.jupiter.version>5.7.2</junit.jupiter.version>
         <assertj.version>3.19.0</assertj.version>
 
         <!-- Logging -->
@@ -166,16 +166,15 @@
 
         <!--Web-->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
+            <version>${tomcat.version}</version>
             <scope>provided</scope>
+        </dependency>
 
-            <!--            -->
-            <!--            <groupId>org.apache.tomcat</groupId>-->
-            <!--            <artifactId>tomcat-servlet-api</artifactId>-->
-            <!--            <version>${tomcat.version}</version>-->
-            <!--            <scope>provided</scope>-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
 
         <dependency>
@@ -191,9 +190,9 @@
 
         <!--Test-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

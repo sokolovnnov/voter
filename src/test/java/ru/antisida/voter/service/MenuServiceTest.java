@@ -1,6 +1,6 @@
 package ru.antisida.voter.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.antisida.voter.to.Menu;
 
@@ -16,12 +16,8 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Autowired
     private MenuService service;
 
-
-
-
-
     @Test
-    public void getAllByDate() {
+    void getAllByDate() {
         List<Menu> menuList = service.getAllByDate(LocalDate.of(2020, Month.JANUARY, 30));
         MATCHER.assertMatch(menuList, restaurant01Menu, restaurant02Menu);
 //        List<Menu> menuList1 = service.getAllByDate(LocalDate.of(2020, Month.JANUARY, 30));
@@ -29,14 +25,14 @@ public class MenuServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getAllByRestaurant() {
+    void getAllByRestaurant() {
         List<Menu> menuList = service.getAllByRestaurant(10_000);
         Menu expMenu = restaurant01Menu;
         MATCHER.assertMatch(menuList, expMenu);
     }
 
     @Test
-    public void get() {
+    void get() {
         Menu menu = service.get(10_000,  LocalDate.of(2020, Month.JANUARY, 30));
         Menu expMenu = restaurant01Menu;
         MATCHER.assertMatch(menu, expMenu);

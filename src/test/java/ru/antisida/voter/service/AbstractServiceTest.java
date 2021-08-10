@@ -1,24 +1,21 @@
 package ru.antisida.voter.service;
 
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.transaction.annotation.Transactional;
 import ru.antisida.voter.repo.JpaUtil;
 
-import static org.junit.Assert.assertThrows;
 import static ru.antisida.voter.util.ValidationUtil.getRootCause;
 
-@ContextConfiguration({
+@SpringJUnitConfig(locations = {
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Transactional
+//@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public abstract class AbstractServiceTest {
 
     @Autowired
@@ -27,7 +24,7 @@ public abstract class AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    @Before
+    @BeforeEach
     public void setup() {
         cacheManager.getCache("dateMenu").clear();
         cacheManager.getCache("restaurantMenu").clear();
@@ -38,7 +35,7 @@ public abstract class AbstractServiceTest {
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
-        assertThrows(rootExceptionClass, () -> {
+        Assertions.assertThrows(rootExceptionClass, () -> {
             try {
                 runnable.run();
             } catch (Exception e) {

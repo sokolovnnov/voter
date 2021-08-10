@@ -1,6 +1,7 @@
 package ru.antisida.voter.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.antisida.voter.UserTestData;
 import ru.antisida.voter.model.Vote;
@@ -9,7 +10,6 @@ import ru.antisida.voter.util.NotFoundException;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-import static org.junit.Assert.assertThrows;
 import static ru.antisida.voter.VoteTestData.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
@@ -18,20 +18,20 @@ public class VoteServiceTest extends AbstractServiceTest {
     private VoteService service;
 
     @Test
-    public void get() {
+    void get() {
         service.get(vote01Id, UserTestData.userId);
         MATCHER.assertMatch(service.get(vote01Id, UserTestData.userId), vote01);
     }
 
     @Test
-    public void deactivate() {
+    void deactivate() {
         service.deactivate(vote01.id(), UserTestData.user.id());
         Vote deactivated = service.get(vote01.id(), UserTestData.user.id());
         MATCHER.assertMatch(deactivated, getDeactivated());
     }
 
     @Test
-    public void create() {
+    void create() {
         Vote created = service.create(getNew(), UserTestData.user.id());
         int id = created.id();
         Vote newVote = getNew();
@@ -41,39 +41,39 @@ public class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void delete() {
+    void delete() {
 //        List<Vote> votes1 = service.getAll(UserTestData.admin.id()); //для проверки работы кэша
         service.delete(vote01.id(), UserTestData.user.id());
-        assertThrows(NotFoundException.class, () -> service.get(vote01.id(), UserTestData.user.id()));
+        Assertions.assertThrows(NotFoundException.class, () -> service.get(vote01.id(), UserTestData.user.id()));
 //        List<Vote> votes = service.getAll(UserTestData.admin.id());
 //        MATCHER.assertMatch(votes, vote01, vote02, vote03);
     }
 
     @Test
-    public void getAllByUser() {
+    void getAllByUser() {
         List<Vote> votes = service.getAllByUser(UserTestData.user.id());
         MATCHER.assertMatch(votes, vote01, vote03);
     }
 
     @Test
-    public void getAllActive() {
+    void getAllActive() {
         List<Vote> votes = service.getAllActive(UserTestData.user.id());
         MATCHER.assertMatch(votes, vote01, vote02, vote03);
     }
 
     @Test
-    public void getLastByUser() {
+    void getLastByUser() {
         MATCHER.assertMatch(service.getLastByUser(UserTestData.user.id()), vote03);
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         List<Vote> votes = service.getAll(UserTestData.admin.id());
         MATCHER.assertMatch(votes, vote01, vote02, vote03);
     }
 
     @Test
-    public void createWithException() throws Exception {
+    void createWithException() throws Exception {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new Vote(null, null,
 //                LocalDateTime.of(2021, Month.MAY, 21, 11, 57, 17),
                 10_000, UserTestData.user.id(), true ), UserTestData.user.id()));
