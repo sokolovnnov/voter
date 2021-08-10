@@ -6,12 +6,11 @@ import ru.antisida.voter.to.Menu;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class MenuController {
 
-    private MenuService menuService;
+    private final MenuService menuService;
 
     public MenuController(MenuService menuService) {
         this.menuService = menuService;
@@ -19,6 +18,6 @@ public class MenuController {
 
 
     public List<Menu> getAllByDate(int userId, LocalDate ld){
-        return menuService.getAllByDate(userId, ld);
+        return menuService.getAllByDate(ld);
     }
 }

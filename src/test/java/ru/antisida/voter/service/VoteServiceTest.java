@@ -8,13 +8,12 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.antisida.voter.UserTestData;
-import ru.antisida.voter.VoteTestData;
 import ru.antisida.voter.model.Vote;
 import ru.antisida.voter.util.NotFoundException;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThrows;
 import static ru.antisida.voter.VoteTestData.*;
 
 
@@ -31,8 +30,8 @@ public class VoteServiceTest {
 
     @Test
     public void get() {
-        service.get(1000, 12000);
-        MATCHER.assertMatch(service.get(1000, 12000), vote01);
+        service.get(vote01Id, UserTestData.userId);
+        MATCHER.assertMatch(service.get(vote01Id, UserTestData.userId), vote01);
     }
 
     @Test

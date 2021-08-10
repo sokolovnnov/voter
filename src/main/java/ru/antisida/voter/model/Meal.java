@@ -6,7 +6,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "meals")
@@ -26,7 +25,7 @@ public class Meal extends AbstractBaseEntity {
     @Min(0)//todo convert to Rub
     private Integer price;
 
-    @ManyToOne(fetch = FetchType.EAGER)//fixme maybe. А нужна ли здесь связь двусторонняя
+    @ManyToOne(fetch = FetchType.LAZY)//fixme maybe. А нужна ли здесь связь двусторонняя
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 

@@ -2,19 +2,19 @@ package ru.antisida.voter.service;
 
 import org.springframework.stereotype.Service;
 import ru.antisida.voter.model.Vote;
-import ru.antisida.voter.repo.jpa.JpaVoteRepo;
+import ru.antisida.voter.repo.datajpa.DataJpaVoteRepo;
 
 import java.util.List;
 
-import static ru.antisida.voter.util.ValidationUtil.*;
+import static ru.antisida.voter.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class VoteService {
     //fixme проверка check
 
-    private final JpaVoteRepo repository;
+    private final DataJpaVoteRepo repository;
 
-    public VoteService(JpaVoteRepo repository) {
+    public VoteService(DataJpaVoteRepo repository) {
         this.repository = repository;
     }
 
@@ -40,7 +40,7 @@ public class VoteService {
     }
 
     public List<Vote> getAllActive(int userId) {
-        return repository.getAllActive(userId);
+        return repository.getAllActive();
     }
 
     public Vote getLastByUser(int userId){
@@ -48,7 +48,7 @@ public class VoteService {
     }
 
     public List<Vote> getAll(int userId){
-        return repository.getAll(userId);
+        return repository.getAll();
     }
 
 }

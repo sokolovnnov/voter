@@ -7,7 +7,6 @@ import ru.antisida.voter.model.Restaurant;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -26,9 +25,6 @@ public class JpaRestaurantRepo {
     }
 
     public List<Restaurant> getActiveByDate(LocalDate ld){
-        LocalDateTime startDay = ld.atStartOfDay();
-        LocalDateTime endDay = ld.plusDays(1).atStartOfDay();
-
         return em.createQuery("SELECT DISTINCT (r) FROM Restaurant r INNER JOIN r.meals m WHERE  m.date =: ld",
                 Restaurant.class)
                 .setParameter("ld", ld)

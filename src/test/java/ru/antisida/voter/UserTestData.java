@@ -8,6 +8,9 @@ import java.util.EnumSet;
 
 public class UserTestData {
 
+    public static final int userId = 12_000;
+    public static final int adminId = 11_000;
+
     public static User user = new User(12000, "user", "user@jj.ru",
             LocalDateTime.of(2021,5, 18, 13, 33, 18 ), EnumSet.of(Role.USER));
     public static User admin = new User(11000, "admin", "admin@jj.ru",

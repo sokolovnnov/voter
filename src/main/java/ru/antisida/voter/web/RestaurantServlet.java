@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class RestaurantServlet  extends HttpServlet {
 
@@ -53,7 +52,7 @@ public class RestaurantServlet  extends HttpServlet {
 
         request.setAttribute("lastvote", voteController.getLastByUser(12000));
         request.setAttribute("restaurants", restaurantController.getAll());
-        request.setAttribute("menus", menuController.getAllByDate(12000, LocalDate.now()));//fixme date
+      //  request.setAttribute("menus", menuController.getAllByDate(12000, LocalDate.now()));//fixme date
         request.getRequestDispatcher("/restaurants.jsp").forward(request, response);
 
      /*   switch (action == null ? "all" : action) {

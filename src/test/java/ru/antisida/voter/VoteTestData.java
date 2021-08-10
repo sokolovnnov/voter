@@ -1,7 +1,5 @@
 package ru.antisida.voter;
 
-import ru.antisida.voter.model.Meal;
-import ru.antisida.voter.model.User;
 import ru.antisida.voter.model.Vote;
 
 import java.time.LocalDateTime;
@@ -9,8 +7,12 @@ import java.time.Month;
 
 public class VoteTestData {
 
-    public static final MatcherFactory<Vote> MATCHER = MatcherFactory.usingIgnoringFieldsComparator(
-            );
+    public static final MatcherFactory<Vote> MATCHER = MatcherFactory.usingIgnoringFieldsComparator();
+
+    public static final int vote01Id = 1000;
+    public static final int vote02Id = 1001;
+    public static final int vote03Id = 1002;
+
     public static Vote vote01 = new Vote(1000, LocalDateTime.of(2021, Month.MAY, 21, 11, 57, 17),
             RestaurantsTestData.restaurant_2.id(), UserTestData.user.id(), true);
     public static Vote vote02 = new Vote(1001, LocalDateTime.of(2021, Month.MAY, 21, 11, 59, 49),

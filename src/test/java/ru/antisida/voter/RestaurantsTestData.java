@@ -11,6 +11,9 @@ public class RestaurantsTestData {
     public static final Restaurant restaurant_1 = new Restaurant(10_000, "Ресторан10_000");
     public static final Restaurant restaurant_2 = new Restaurant(10_001, "Ресторан10_001");
 
+    public static final int Restaurant1Id = 10_000;
+    public static final int Restaurant2Id = 10_001;
+
     public static List<Restaurant> restaurants = List.of(restaurant_1, restaurant_2);
 
     public static Restaurant getUpdated() {

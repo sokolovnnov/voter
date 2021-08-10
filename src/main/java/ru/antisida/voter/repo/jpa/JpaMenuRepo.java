@@ -11,12 +11,11 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
 @Transactional(readOnly = true)
-public class JpaMenuRepo {
+public class JpaMenuRepo {     // fixme удалить класс!!!
 
     @PersistenceContext
     EntityManager em;
@@ -42,7 +41,7 @@ public class JpaMenuRepo {
                 .stream()
                 .map(mealList -> {
                     Menu menu = new Menu(mealList);
-                    menu.setRestaurant(mealList.get(0).getRestaurant());
+                    //menu.setRestaurant(mealList.get(0).getRestaurant());
                     return menu;
                 })
                 .collect(Collectors.toList())

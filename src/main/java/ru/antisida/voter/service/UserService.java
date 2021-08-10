@@ -2,31 +2,35 @@ package ru.antisida.voter.service;
 
 import org.springframework.stereotype.Service;
 import ru.antisida.voter.model.User;
-import ru.antisida.voter.repo.jpa.JpaUserRepo;
+import ru.antisida.voter.repo.datajpa.DataJpaUserRepo;
 
 import java.util.List;
 
-import static ru.antisida.voter.util.ValidationUtil.*;
+import static ru.antisida.voter.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class UserService {
 
-    private JpaUserRepo repo;
+    private final DataJpaUserRepo repo;
+
+    public UserService(DataJpaUserRepo repo) {
+        this.repo = repo;
+    }
 
     public User get(int id, int userId){
-        return checkNotFoundWithId(repo.get(id, userId), id);
+        return checkNotFoundWithId(repo.get(id), id);
     }
 
     public List<User> getAll(int userId){
-        return repo.getAll(userId);
+        return repo.getAll();
     }
 
     public User save(User user, int userId){
-        return repo.save(user, userId);
+        return repo.save(user);
     }
 
     public void delete(int id, int userId){
-        checkNotFoundWithId(repo.delete(id, userId), id);
+        checkNotFoundWithId(repo.delete(id), id);
     }
 
 }

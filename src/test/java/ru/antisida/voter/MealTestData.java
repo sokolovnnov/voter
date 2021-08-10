@@ -10,6 +10,8 @@ public class MealTestData {
 
     public static final MatcherFactory<Meal> MATCHER = MatcherFactory.usingIgnoringFieldsComparator("restaurant");
 
+    public final static int meal01Id = 1003;
+
 
     public static Meal meal01 = new Meal(1003, LocalDate.of(2020, 1, 30), "Чай10_000", 1,
             RestaurantsTestData.restaurant_1);

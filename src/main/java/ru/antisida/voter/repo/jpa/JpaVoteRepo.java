@@ -2,7 +2,6 @@ package ru.antisida.voter.repo.jpa;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.antisida.voter.model.User;
 import ru.antisida.voter.model.Vote;
 
 import javax.persistence.EntityManager;
