@@ -6,7 +6,7 @@
 
     <display-name>Voter</display-name>
 
-    <servlet>
+   <!-- <servlet>
         <servlet-name>restaurantServlet</servlet-name>
         <servlet-class>ru.antisida.voter.web.RestaurantServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
@@ -14,7 +14,7 @@
     <servlet-mapping>
         <servlet-name>restaurantServlet</servlet-name>
         <url-pattern>/restaurants</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 
 
     <context-param>

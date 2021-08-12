@@ -1,5 +1,6 @@
 package ru.antisida.voter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Table(name = "meals")
 //todo in topjava: @Table(name = "meals",
 //        uniqueConstraints = @UniqueConstraint(name = "user_roles_idx", columnNames = {"USER_ID", "DATE_TIME"}))
+//@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE, setterVisibility = NONE)
 public class Meal extends AbstractBaseEntity {
 
     @Column(name = "date")
@@ -33,6 +35,7 @@ public class Meal extends AbstractBaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)//fixme maybe. А нужна ли здесь связь двусторонняя
     @JoinColumn(name = "restaurant_id")
+    @JsonIgnore
     private Restaurant restaurant;
 
     public Meal() {
