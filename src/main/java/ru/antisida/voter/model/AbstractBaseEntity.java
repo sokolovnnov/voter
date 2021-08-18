@@ -1,14 +1,14 @@
 package ru.antisida.voter.model;
 
 import org.hibernate.Hibernate;
-import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
+import ru.antisida.voter.HasId;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity implements Persistable<Integer> {
+public abstract class AbstractBaseEntity implements /*Persistable<Integer>,*/ HasId {
 
     public static final int START_SEQ = 1000;
 

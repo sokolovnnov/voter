@@ -2,6 +2,7 @@ package ru.antisida.voter.util;
 
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
+import ru.antisida.voter.model.AbstractBaseEntity;
 
 public class ValidationUtil {
     private ValidationUtil() {
@@ -39,7 +40,7 @@ public class ValidationUtil {
             throw new IllegalArgumentException(entity + " must be new (id=null)");
         }
     }
-
+*/
     public static void assureIdConsistent(AbstractBaseEntity entity, int id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (entity.isNew()) {
@@ -48,5 +49,5 @@ public class ValidationUtil {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
     }
-*/
+
 }

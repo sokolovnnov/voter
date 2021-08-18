@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,14 @@ public class User extends AbstractBaseEntity{
     @NotBlank
     @Column(name = "e_mail")
     private String email;
+
+    @Column(name = "password", nullable = false)
+    @NotBlank
+    @Size(min = 5, max = 100)
+    private String password;
+
+    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
+    private boolean enabled = true;
 
     @NotNull
     @Column(name = "date_time_reg")
@@ -50,12 +59,25 @@ public class User extends AbstractBaseEntity{
 
     public User() {}
 
-    public User(Integer id, String name, String email, LocalDateTime dateTimeReg, Set<Role> roles) {
+    public User(Integer id, String name, String email, String password, boolean enabled, LocalDateTime ld, Role role,
+                Role... roles) {
         super(id);
         this.name = name;
         this.email = email;
-        this.dateTimeReg = dateTimeReg;
-        this.roles = roles;
+        this.password = password;
+        this.enabled = enabled;
+        this.dateTimeReg = ld;
+        this.roles = EnumSet.of(role, roles);
+    }
+
+    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.enabled = true;
+        this.dateTimeReg = LocalDateTime.now();
+        this.roles = EnumSet.of(role, roles);
     }
 
     public String getName() {
@@ -96,5 +118,21 @@ public class User extends AbstractBaseEntity{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

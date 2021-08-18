@@ -14,11 +14,11 @@ import static ru.antisida.voter.MenuTestData.*;
 public class MenuServiceTest extends AbstractServiceTest {
 
     @Autowired
-    private MenuService service;
+    private RestaurantService service;
 
     @Test
     void getAllByDate() {
-        List<Menu> menuList = service.getAllByDate(LocalDate.of(2020, Month.JANUARY, 30));
+        List<Menu> menuList = service.getAllMenuByDate(LocalDate.of(2020, Month.JANUARY, 30));
         MATCHER.assertMatch(menuList, restaurant01Menu, restaurant02Menu);
 //        List<Menu> menuList1 = service.getAllByDate(LocalDate.of(2020, Month.JANUARY, 30));
 //        MATCHER.assertMatch(menuList1, restaurant01Menu, restaurant02Menu);
@@ -26,14 +26,14 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllByRestaurant() {
-        List<Menu> menuList = service.getAllByRestaurant(10_000);
+        List<Menu> menuList = service.getAllMenuByRestaurant(10_000);
         Menu expMenu = restaurant01Menu;
         MATCHER.assertMatch(menuList, expMenu);
     }
 
     @Test
     void get() {
-        Menu menu = service.get(10_000,  LocalDate.of(2020, Month.JANUARY, 30));
+        Menu menu = service.getMenu(10_000,  LocalDate.of(2020, Month.JANUARY, 30));
         Menu expMenu = restaurant01Menu;
         MATCHER.assertMatch(menu, expMenu);
     }

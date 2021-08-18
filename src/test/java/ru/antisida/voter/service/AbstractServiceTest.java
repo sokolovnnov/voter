@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.transaction.annotation.Transactional;
 import ru.antisida.voter.repo.JpaUtil;
 
 import static ru.antisida.voter.util.ValidationUtil.getRootCause;
@@ -14,8 +15,8 @@ import static ru.antisida.voter.util.ValidationUtil.getRootCause;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-@Transactional
-//@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+//@Transactional
+@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public abstract class AbstractServiceTest {
 
     @Autowired
@@ -30,6 +31,7 @@ public abstract class AbstractServiceTest {
         cacheManager.getCache("restaurantMenu").clear();
         cacheManager.getCache("menu").clear();
         cacheManager.getCache("vote").clear();
+        cacheManager.getCache("user").clear();
         jpaUtil.clear2ndLevelHibernateCache();
     }
 

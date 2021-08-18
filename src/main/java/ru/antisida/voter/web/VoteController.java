@@ -20,7 +20,7 @@ public class VoteController {
     }
 
     public Vote create(Vote vote, int userId){
-        return voteService.create(vote, userId);
+        return voteService.create(vote, 12000);
     }
 
 //    public boolean delete(int id, int userId){
@@ -32,7 +32,7 @@ public class VoteController {
     }
 
     public Vote getLastByUser(int userId){
-        return voteService.getLastByUser(userId);
+        return voteService.getLastToday(userId);
     }
 
     public List<Vote> getAll(int userId){

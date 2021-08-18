@@ -2,13 +2,9 @@ package ru.antisida.voter.web;
 
 import org.springframework.stereotype.Controller;
 import ru.antisida.voter.model.Restaurant;
-import ru.antisida.voter.service.MealService;
 import ru.antisida.voter.service.MenuService;
 import ru.antisida.voter.service.RestaurantService;
-import ru.antisida.voter.to.Menu;
 
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -27,13 +23,13 @@ public class RestaurantController {
     public Restaurant get(int id) {
 //        int userId = SecurityUtil.authUserId();
 //        log.info("get meal {} for user {}", id, userId);
-        return service.get(id, 1);//fixme userId
+        return service.get(id);//fixme userId
     }
 
     public void delete(int id) {
 //        int userId = SecurityUtil.authUserId();
 //        log.info("delete meal {} for user {}", id, userId);
-        service.delete(id, 1);//fixme userId
+        service.delete(id);//fixme userId
     }
 
 //    @GetMapping("/restaurants")
@@ -41,14 +37,14 @@ public class RestaurantController {
 //        int userId = SecurityUtil.authUserId();
 //        log.info("getAll for user {}", userId);
 //        return MealsUtil.getTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
-        return service.getAll(1);//fixme userId
+        return service.getAll();//fixme userId
     }
 
     public Restaurant create(Restaurant restaurant) {
 //        int userId = SecurityUtil.authUserId();
 //        checkNew(meal);
 //        log.info("create {} for user {}", meal, userId);
-        return service.create(restaurant, 1);//fixme userId
+        return service.create(restaurant);//fixme userId
     }
 
     public void update(Restaurant restaurant, int id) {

@@ -30,4 +30,8 @@ public class DataJpaUserRepo {
         return  crudUserRepo.delete(id) != 0;
     }
 
+    public User getByEmail(String email) {
+        return crudUserRepo.getByEmail(email);
+    }
+
 }

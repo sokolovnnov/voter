@@ -20,7 +20,7 @@ public class MealService {
         return checkNotFoundWithId(mealRepo.get(id), id);
     }
 
-    public Meal create(Meal meal, int userId){
+    public Meal create(Meal meal){
         return mealRepo.save(meal);
     }
 
@@ -29,11 +29,11 @@ public class MealService {
         mealRepo.delete(id);
     }
 
-    public List<Meal> getAll(int userId){
+    public List<Meal> getAll(){
         return mealRepo.getAll();
     }
 
-    public List<Meal> getAllByDate(int userId, LocalDate ld){
+    public List<Meal> getAllByDate(LocalDate ld){
         return mealRepo.getAllByDate(ld);
     }
 

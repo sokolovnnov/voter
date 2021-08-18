@@ -14,6 +14,7 @@ CREATE TABLE users
     name          VARCHAR                           NOT NULL,
     e_mail        VARCHAR                           NOT NULL,
     password      VARCHAR                           NOT NULL,
+    enabled       BOOL                DEFAULT TRUE  NOT NULL,
     date_time_reg TIMESTAMP           DEFAULT now() NOT NULL
 
 );
@@ -47,11 +48,11 @@ CREATE TABLE meals
 
 CREATE TABLE votes
 (
-    id            INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('global_seq'),
+    id            INTEGER   NOT NULL PRIMARY KEY DEFAULT nextval('global_seq'),
     is_active     BOOLEAN,
-    date_time     TIMESTAMP                    DEFAULT now(),
-    user_id       INTEGER NOT NULL,
-    restaurant_id INTEGER NOT NULL,
+    date_time     TIMESTAMP NOT NULL             DEFAULT now(),
+    user_id       INTEGER   NOT NULL,
+    restaurant_id INTEGER   NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) references restaurants (id) ON DELETE CASCADE
 );

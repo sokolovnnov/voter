@@ -41,7 +41,6 @@
 
     <cache alias="menu" uses-template="menuNonExpiryCache"/>
 
-
     <cache-template name="voteNonExpiryCache">
         <expiry>
             <none/>
@@ -50,5 +49,14 @@
     </cache-template>
 
     <cache alias="vote" uses-template="voteNonExpiryCache"/>
+
+    <cache-template name="userNonExpiryCache">
+        <expiry>
+            <none/>
+        </expiry>
+        <heap unit="entries">10000</heap>
+    </cache-template>
+
+    <cache alias="user" uses-template="voteNonExpiryCache"/>
 
 </config>

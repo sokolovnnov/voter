@@ -8,7 +8,7 @@ import ru.antisida.voter.model.Restaurant;
 import ru.antisida.voter.service.RestaurantService;
 
 @RestController
-@RequestMapping(value = "/restaurant", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/admin/restaurant", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestaurantRestController {
 
     @Autowired
@@ -22,11 +22,11 @@ public class AdminRestaurantRestController {
 
     @PutMapping("/{id}")
     public void update(@RequestBody Restaurant restaurant, @PathVariable("id") int id) {
-        restaurantService.save(restaurant), restaurant.id();
+        restaurantService.update(restaurant, id);
     }
 
     @PostMapping
-    public Restaurant create(@RequestBody Restaurant restaurant, int userId) {
-        return restaurantService.save(restaurant);
+    public Restaurant create(@RequestBody Restaurant restaurant) {
+        return restaurantService.create(restaurant);
     }
 }
