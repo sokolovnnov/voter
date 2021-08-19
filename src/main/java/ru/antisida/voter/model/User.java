@@ -67,7 +67,7 @@ public class User extends AbstractBaseEntity{
         this.password = password;
         this.enabled = enabled;
         this.dateTimeReg = ld;
-        this.roles = EnumSet.of(role, roles);
+        setRoles(EnumSet.of(role, roles));
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
@@ -77,7 +77,21 @@ public class User extends AbstractBaseEntity{
         this.password = password;
         this.enabled = true;
         this.dateTimeReg = LocalDateTime.now();
-        this.roles = EnumSet.of(role, roles);
+        setRoles(EnumSet.of(role, roles));
+    }
+
+    public User(User u) {
+        this(u.id, u.name, u.email, u.password, u.enabled, u.dateTimeReg, u.roles);
+    }
+
+    public User(Integer id, String name, String email, String password, boolean enabled, LocalDateTime dateTimeReg, Set<Role> roles) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
+        this.dateTimeReg = dateTimeReg;
+        setRoles(roles);
     }
 
     public String getName() {

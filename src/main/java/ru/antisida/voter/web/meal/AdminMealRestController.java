@@ -58,8 +58,8 @@ public class AdminMealRestController {
         if (ld == null) ld = LocalDate.now();
         return mealService.getAllByDate(ld);
     }
-
-    public List<Meal> getAllByRestaurant(int restaurantId) {
+    @GetMapping("/restaurant/{id}")
+    public List<Meal> getAllByRestaurant(@PathVariable("id") int restaurantId) {
         return mealService.getAllByRestaurant(restaurantId);
     }
 }

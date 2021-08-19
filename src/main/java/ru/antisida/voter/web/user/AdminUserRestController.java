@@ -10,7 +10,6 @@ import ru.antisida.voter.model.User;
 import ru.antisida.voter.service.UserService;
 import ru.antisida.voter.to.UserTo;
 import ru.antisida.voter.util.ValidationUtil;
-import ru.antisida.voter.web.SecurityUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -29,7 +28,7 @@ public class AdminUserRestController {
 
     @GetMapping("/{id}")
     public User get(@PathVariable int id) {
-        return userService.get(SecurityUtil.authUserId());
+        return userService.get(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -44,7 +43,7 @@ public class AdminUserRestController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        userService.delete(SecurityUtil.authUserId());
+        userService.delete(id);
     }
 
 
@@ -53,7 +52,7 @@ public class AdminUserRestController {
     public void update(@RequestBody UserTo userTo, @PathVariable int id) {
         User user = get(userTo.id());
         User updated = UserTo.updateFromTo(user, userTo);
-        ValidationUtil.assureIdConsistent(updated, SecurityUtil.authUserId());
+        ValidationUtil.assureIdConsistent(updated, 12000);
         userService.update(user);
     }
 

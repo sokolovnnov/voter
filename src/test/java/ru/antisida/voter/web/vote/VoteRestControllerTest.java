@@ -38,7 +38,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getLastToday() throws Exception {
-        Vote newVOne = voteService.create(new Vote(1008,
+        voteService.create(new Vote(1008,
                 LocalDateTime.now(),
                 RestaurantsTestData.RESTAURANT_2.id(), UserTestData.user.id(), true), UserTestData.userId);
         Vote newVTwo = voteService.create(new Vote(1009,
