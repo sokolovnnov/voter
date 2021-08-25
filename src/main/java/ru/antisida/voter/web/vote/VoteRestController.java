@@ -5,9 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import ru.antisida.voter.model.Vote;
 import ru.antisida.voter.service.VoteService;
 import ru.antisida.voter.to.VoteResult;
+import ru.antisida.voter.to.VoteTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,8 +21,8 @@ public class VoteRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Vote create(@RequestBody Vote vote){
-        return voteService.create(vote, 12000);
+    public VoteTo create(@RequestBody VoteTo voteTo){
+        return voteService.create(voteTo, 12000);
     }
 
 //    @DeleteMapping("/{id}")
@@ -32,12 +32,12 @@ public class VoteRestController {
 //    }
 
     @GetMapping("/last")
-    public Vote getLastByDay(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ld){
+    public VoteTo getLastByDay(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ld){
         return voteService.getActiveByUserByDate(12000, ld);
     } //fixme убрать заглушку
 
     @GetMapping("/last/today")
-    public Vote getLastToday(){
+    public VoteTo getLastToday(){
         return voteService.getLastToday(12000);
     } //fixme убрать заглушку
 

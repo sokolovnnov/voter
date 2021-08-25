@@ -10,7 +10,7 @@ import ru.antisida.voter.model.Vote;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Transactional
+@Transactional(readOnly = true)
 public interface CrudVoteRepo extends JpaRepository<Vote, Integer> {
 
     @Transactional
@@ -25,8 +25,8 @@ public interface CrudVoteRepo extends JpaRepository<Vote, Integer> {
     List<Vote> findAllByUserId(int userId);
 
 
-    @Query("SELECT v FROM Vote v WHERE v.isActive = true AND v.userId =:userId AND v.localDateTime >= :startDate AND" +
-           " v.localDateTime <:endDate")
+    @Query("SELECT v FROM Vote v WHERE v.isActive = true AND v.user.id =:userId AND v.localDateTime >= :startDate" +
+           " AND v.localDateTime <:endDate")
     List<Vote> findAllActiveByUserIdAndDate(@Param("userId") int userId,
                                             @Param("startDate") LocalDateTime startDate,
                                             @Param("endDate") LocalDateTime endDate);

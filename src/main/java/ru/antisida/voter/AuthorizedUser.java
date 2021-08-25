@@ -1,6 +1,7 @@
 package ru.antisida.voter;
 
 import ru.antisida.voter.model.User;
+import ru.antisida.voter.service.mappers.UserMapper;
 import ru.antisida.voter.to.UserTo;
 
 import java.io.Serial;
@@ -14,7 +15,7 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
 
     public AuthorizedUser(User user) {
         super(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, user.getRoles());
-        this.userTo = UserTo.asTo(user);
+        this.userTo = UserMapper.INSTANCE.toTo(user);
     }
 
     public int getId() {

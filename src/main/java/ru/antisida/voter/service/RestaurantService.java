@@ -6,51 +6,59 @@ import org.springframework.util.Assert;
 import ru.antisida.voter.model.Restaurant;
 import ru.antisida.voter.repo.datajpa.DataJpaMealRepo;
 import ru.antisida.voter.repo.datajpa.DataJpaRestaurantRepo;
+import ru.antisida.voter.service.mappers.RestaurantMapper;
 import ru.antisida.voter.to.Menu;
+import ru.antisida.voter.to.RestaurantTo;
 import ru.antisida.voter.util.MenuUtil;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.antisida.voter.util.ValidationUtil.checkNotFoundWithId;
+import static ru.antisida.voter.util.ValidationUtil.*;
 
 @Service
 public class RestaurantService {
 
     private final DataJpaRestaurantRepo repository;
     private final DataJpaMealRepo mealRepository;
+    private final RestaurantMapper restaurantMapper;
 
-    //todo добавить проверку
-    public RestaurantService(DataJpaRestaurantRepo repository, DataJpaMealRepo mealRepository) {
+    public RestaurantService(DataJpaRestaurantRepo repository, DataJpaMealRepo mealRepository, RestaurantMapper restaurantMapper) {
         this.repository = repository;
         this.mealRepository = mealRepository;
+        this.restaurantMapper = restaurantMapper;
     }
 
-    public Restaurant get(int id) {
-        return checkNotFoundWithId(repository.get(id), id);
+    public RestaurantTo get(int id) {
+        return restaurantMapper.toTo(checkNotFoundWithId(repository.get(id), id));
     }
 
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id), id);
     }
 
-     public List<Restaurant> getActiveByDate(LocalDate ld){
-        return repository.getActiveByDate(ld);
+    public List<RestaurantTo> getActiveByDate(LocalDate ld){
+        return restaurantMapper.toTos(repository.getActiveByDate(ld));
     }
 
     @Cacheable("restaurant")
-    public List<Restaurant> getAll() {
-        return repository.getAll();
+    public List<RestaurantTo> getAll() {
+        return restaurantMapper.toTos(repository.getAll());
     }
 
-    public void update(Restaurant restaurant, int userId) {
-        Assert.notNull(restaurant, "restaurant must not be null");
-        checkNotFoundWithId(repository.save(restaurant), restaurant.id());
+    public void update(RestaurantTo restaurantTo, int id) {
+        Assert.notNull(restaurantTo, "restaurant must not be null");
+        assureIdConsistent(restaurantTo, id);
+        Restaurant updated = checkNotFoundWithId(repository.get(restaurantTo.id()), restaurantTo.id());
+        restaurantMapper.updateEntity(restaurantTo, updated);
+        repository.save(updated);
     }
 
-    public Restaurant create(Restaurant restaurant) {
-        Assert.notNull(restaurant, "restaurant must not be null");
-        return repository.save(restaurant);
+    public RestaurantTo create(RestaurantTo restaurantTo) {
+        checkNew(restaurantTo);
+        Assert.notNull(restaurantTo, "restaurant must not be null");
+        Restaurant newRestaurant = repository.save(restaurantMapper.toEntity(restaurantTo));
+        return restaurantMapper.toTo(newRestaurant);
     }
 
     //fixme при создании меню каждый раз идет запрос к базе, чтобы вытянуть ресторан. Чтобы такого не было:
@@ -69,5 +77,4 @@ public class RestaurantService {
     public Menu getMenu(int restaurantId, LocalDate ld){
         return MenuUtil.toMenu(mealRepository.getAllByRestaurantAndByDate(restaurantId, ld));
     }
-
 }

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import ru.antisida.voter.model.Meal;
 import ru.antisida.voter.model.Restaurant;
 
-import javax.persistence.OneToOne;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -56,5 +55,14 @@ public class Menu {
     @Override
     public int hashCode() {
         return Objects.hash(date, restaurant);
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+               "date=" + date +
+               ", restaurant=" + restaurant +
+               ", mealList=" + mealList +
+               '}';
     }
 }

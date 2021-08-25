@@ -1,6 +1,7 @@
 package ru.antisida.voter;
 
 import ru.antisida.voter.model.Meal;
+import ru.antisida.voter.to.MealTo;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -10,6 +11,7 @@ public class MealTestData {
 
     public static final MatcherFactory<Meal> MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Meal.class,
             "restaurant");
+    public static final MatcherFactory<MealTo> MATCHER_TO = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class);
 
     public final static int meal01Id = 1003;
 

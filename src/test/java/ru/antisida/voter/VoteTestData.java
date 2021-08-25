@@ -2,6 +2,7 @@ package ru.antisida.voter;
 
 import ru.antisida.voter.model.Vote;
 import ru.antisida.voter.to.VoteResult;
+import ru.antisida.voter.to.VoteTo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +13,8 @@ public class VoteTestData {
 
     public static final MatcherFactory<Vote> MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class,
             "localDateTime");
+    public static final MatcherFactory<VoteTo> MATCHER_TO = MatcherFactory.usingIgnoringFieldsComparator(
+            VoteTo.class/*, "localDateTime"*/);
     public static final MatcherFactory<VoteResult> VOTE_RESULT_MATCHER =
             MatcherFactory.usingIgnoringFieldsComparator(VoteResult.class);
 
@@ -26,13 +29,13 @@ public class VoteTestData {
 
 
     public static Vote vote00 = new Vote(1005, LocalDateTime.of(2021, Month.MAY, 21, 11, 51, 17),
-            RestaurantsTestData.RESTAURANT_2.id(), UserTestData.user.id(), false);
+            RestaurantsTestData.RESTAURANT_2, UserTestData.user, false);
     public static Vote vote01 = new Vote(1000, LocalDateTime.of(2021, Month.MAY, 21, 11, 57, 17),
-            RestaurantsTestData.RESTAURANT_2.id(), UserTestData.user.id(), true);
+            RestaurantsTestData.RESTAURANT_2, UserTestData.user, true);
     public static Vote vote02 = new Vote(1001, LocalDateTime.of(2021, Month.MAY, 21, 11, 59, 49),
-            RestaurantsTestData.RESTAURANT_1.id(), UserTestData.admin.id(), true);
+            RestaurantsTestData.RESTAURANT_1, UserTestData.admin, true);
     public static Vote vote03 = new Vote(1002, LocalDateTime.of(2021, Month.JUNE, 21, 11, 59, 49),
-            RestaurantsTestData.RESTAURANT_1.id(), UserTestData.userId, true);
+            RestaurantsTestData.RESTAURANT_1, UserTestData.user, true);
 
     public static final List<Vote> VOTES = List.of(vote01, vote02, vote03);
     public static Vote getDeactivated(){
@@ -42,7 +45,7 @@ public class VoteTestData {
     }
     public static Vote getNew(){
         return new Vote(null, LocalDateTime.of(2021, Month.JULY, 22, 11, 57, 17),
-                RestaurantsTestData.RESTAURANT_2.id(), UserTestData.user.id(), true);
+                RestaurantsTestData.RESTAURANT_2, UserTestData.user, true);
     }
 
 /*

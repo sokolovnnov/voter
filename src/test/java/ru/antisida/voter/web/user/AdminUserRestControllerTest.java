@@ -1,5 +1,6 @@
 package ru.antisida.voter.web.user;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,27 +12,43 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.antisida.voter.UserTestData;
 import ru.antisida.voter.model.User;
 import ru.antisida.voter.service.UserService;
+import ru.antisida.voter.service.mappers.UserCreateToMapper;
+import ru.antisida.voter.service.mappers.UserMapper;
+import ru.antisida.voter.to.UserCreateTo;
 import ru.antisida.voter.to.UserTo;
 import ru.antisida.voter.util.NotFoundException;
 import ru.antisida.voter.web.AbstractControllerTest;
 import ru.antisida.voter.web.json.JsonUtil;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 class AdminUserRestControllerTest extends AbstractControllerTest {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
+    private static UserMapper userMapper;
+    private static UserCreateToMapper userCreateToMapper;
+
+    @BeforeAll
+    static void init(){
+        userMapper = UserMapper.INSTANCE;
+        userCreateToMapper = UserCreateToMapper.INSTANCE;
+    }
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/admin/user").with(userHttpBasic(UserTestData.admin)))
+        perform(MockMvcRequestBuilders.get("/rest/admin/user")
+                .with(userHttpBasic(UserTestData.admin)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.MATCHER.contentJson(UserTestData.user, UserTestData.admin));
+                .andExpect(UserTestData.MATCHER_TO.contentJson(userMapper.toTos(List.of(UserTestData.user,
+                        UserTestData.admin))));
     }
 
     @Test
@@ -41,21 +58,23 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.MATCHER.contentJson(UserTestData.user));
+                .andExpect(UserTestData.MATCHER_TO.contentJson(userMapper.toTo(UserTestData.user)));
     }
 
     @Test
     void create() throws Exception {
-        User newUser = UserTestData.getNew();
+        UserCreateTo newUserTo = userCreateToMapper.toTo(UserTestData.getNew());
         ResultActions actions = perform(MockMvcRequestBuilders.post("/rest/admin/user")
                 .with(userHttpBasic(UserTestData.admin))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(UserTestData.getNew())));
-        User createdUser = UserTestData.MATCHER.readFromJson(actions);
-        int id = createdUser.id();
-        newUser.setId(id);
+                .content(JsonUtil.writeValue(newUserTo)));
+        UserTo createdUserTo = UserTestData.MATCHER_TO.readFromJson(actions);
+        int id = createdUserTo.id();
+        newUserTo.setId(id);
+        User newUser = userCreateToMapper.toEntity(newUserTo);
+        User createdUser = userMapper.toEntity(createdUserTo);
         UserTestData.MATCHER.assertMatch(createdUser, newUser);
-        UserTestData.MATCHER.assertMatch(userService.get(id), newUser);
+        UserTestData.MATCHER.assertMatch(userMapper.toEntity(userService.get(id)), newUser);
     }
 
     @Test
@@ -68,18 +87,15 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
 
     @Test
     @Transactional
-    void update() throws Exception {//fixme userTo
+    void update() throws Exception {
         User updated = UserTestData.getUpdated();
-        UserTo userTo = UserTo.asTo(updated);
+        UserTo userUpdatedTo = userMapper.toTo(updated);
         perform(MockMvcRequestBuilders.put("/rest/admin/user/" + UserTestData.userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(UserTestData.admin))
-                .content(JsonUtil.writeValue(userTo)))
+                .content(JsonUtil.writeValue(userUpdatedTo)))
                 .andExpect(status().isNoContent());
-
-        User a = UserTo.createNewFromTo(userTo);
-        a.setId(12000);
-        UserTestData.MATCHER.assertMatch(userService.get(UserTestData.userId), a);
+        UserTestData.MATCHER.assertMatch(userMapper.toEntity(userService.get(UserTestData.userId)), updated);
     }
 
     @Test
@@ -88,7 +104,7 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(UserTestData.admin)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.MATCHER.contentJson(UserTestData.admin));
+                .andExpect(UserTestData.MATCHER_TO.contentJson(userMapper.toTo(UserTestData.admin)));
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
-public class UserTo extends BaseTo implements Serializable {
+public class UserCreateTo extends BaseTo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -23,22 +23,22 @@ public class UserTo extends BaseTo implements Serializable {
     @Size(max = 100)
     private String email;
 
-    /*@NotBlank
+    @NotBlank
     @Size(min = 5, max = 32, message = "length must be between 5 and 32 characters")
-    private String password;*/
+    private String password;
 
     private Set<Role> roles;
 
     private boolean enabled = true;
 
-    public UserTo() {
+    public UserCreateTo() {
     }
 
-    public UserTo(Integer id, String name, String email, String password, Set<Role> roles, boolean enabled) {
+    public UserCreateTo(Integer id, String name, String email, String password, Set<Role> roles, boolean enabled) {
         super(id);
         this.name = name;
         this.email = email;
-//        this.password = password;
+        this.password = password;
         this.roles = roles;
         this.enabled = enabled;
     }
@@ -59,13 +59,13 @@ public class UserTo extends BaseTo implements Serializable {
         this.email = email;
     }
 
-//    public String getPassword() {
-//        return password;
-//    }
+    public String getPassword() {
+        return password;
+    }
 
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Set<Role> getRoles() {
         return roles;
@@ -85,11 +85,13 @@ public class UserTo extends BaseTo implements Serializable {
 
     @Override
     public String toString() {
-        return "UserTo{" +
+        return "UserCreateTo{" +
                "id=" + id +
                ", name='" + name + '\'' +
                ", email='" + email + '\'' +
-//               ", password='" + password + '\'' +
+               ", password='" + password + '\'' +
+               ", roles=" + roles +
+               ", enabled=" + enabled +
                '}';
     }
 }

@@ -2,6 +2,7 @@ package ru.antisida.voter.repo.datajpa;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.antisida.voter.model.User;
 import ru.antisida.voter.model.Vote;
 
 import java.time.LocalDate;
@@ -11,14 +12,17 @@ import java.util.List;
 public class DataJpaVoteRepo {
 
     private final CrudVoteRepo crudVoteRepo;
+    private final CrudUserRepo crudUserRepo;
 
-    public DataJpaVoteRepo(CrudVoteRepo crudVoteRepo) {
+    public DataJpaVoteRepo(CrudVoteRepo crudVoteRepo, CrudUserRepo crudUserRepo) {
         this.crudVoteRepo = crudVoteRepo;
+        this.crudUserRepo = crudUserRepo;
     }
 
     @Transactional
     public Vote save(Vote vote, int userId) {
-        vote.setUserId(userId);
+        User user = crudUserRepo.getOne(userId);
+        vote.setUser(user);
         Vote lastVote = getActiveByUserByDate(userId, LocalDate.now());
         if (lastVote != null) {
             lastVote.setActive(false);//fixme проверить логику деактивации
@@ -29,7 +33,7 @@ public class DataJpaVoteRepo {
 
     public Vote get(int id, int userId) {
         return crudVoteRepo.findById(id)
-                .filter(vote -> vote.getUserId() == userId)
+                .filter(vote -> vote.getUser().getId() == userId)//it's checking
                 .orElse(null);
     }
 
@@ -38,7 +42,6 @@ public class DataJpaVoteRepo {
     }
 
     public List<Vote> getAllActiveByDate(LocalDate ld) {
-
 //        return crudVoteRepo.findAllActiveByDate(LocalDate.of(2021, Month.MAY, 21).atStartOfDay(),
 //                LocalDate.of(2021, Month.MAY, 21).plusDays(1).atStartOfDay());
         return crudVoteRepo.findAllActiveByDate(ld.atStartOfDay(), ld.plusDays(1).atStartOfDay());//fixme
@@ -61,20 +64,18 @@ public class DataJpaVoteRepo {
 //                .orElse(null);
     }
 
-    @Transactional
+   /* @Transactional
     public Vote deactivate(int id, int userId) {
         Vote vote = crudVoteRepo.getOne(id);
         vote.setActive(false);
         return crudVoteRepo.save(vote);
-    }
+    }*/
 
     public boolean delete(int id) {
         return crudVoteRepo.deleteById(id) != 0;
     }
 
-
     public List<Vote> getResult(LocalDate ld) {
         return getAllActiveByDate(ld);
-
     }
 }

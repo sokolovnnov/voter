@@ -2,13 +2,16 @@ package ru.antisida.voter;
 
 import ru.antisida.voter.model.Role;
 import ru.antisida.voter.model.User;
+import ru.antisida.voter.to.UserTo;
 
 import java.util.EnumSet;
 
 public class UserTestData {
 
     public static final MatcherFactory<User> MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class,
-                    "dateTimeReg", "votes");
+                    "dateTimeReg", "votes", "password");
+    public static final MatcherFactory<UserTo> MATCHER_TO = MatcherFactory.usingIgnoringFieldsComparator(UserTo.class
+            , "password");
 
     public static final int userId = 12_000;
     public static final int adminId = 11_000;
@@ -26,7 +29,7 @@ public class UserTestData {
         updated.setName("UpdatedName");
         updated.setPassword("newPass");
         updated.setEnabled(false);
-        updated.setRoles(EnumSet.of(Role.ADMIN));
+        updated.setRoles(EnumSet.of(Role.USER));
         return updated;
     }
 }

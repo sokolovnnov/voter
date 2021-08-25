@@ -33,7 +33,7 @@ public class Meal extends AbstractBaseEntity {
     private Integer price;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)//fixme maybe. А нужна ли здесь связь двусторонняя
+    @ManyToOne(fetch = FetchType.EAGER)//fixme maybe. А нужна ли здесь связь двусторонняя
     @JoinColumn(name = "restaurant_id")
     @JsonIgnore
     private Restaurant restaurant;
@@ -41,7 +41,7 @@ public class Meal extends AbstractBaseEntity {
     public Meal() {
     }
 
-    public Meal(Integer id, @NotNull LocalDate date, @NotBlank String name, @Min(0) Integer price,
+    public Meal(Integer id, LocalDate date, String name, Integer price,
                 Restaurant restaurant) {
         super(id);
         this.date = date;
@@ -76,5 +76,24 @@ public class Meal extends AbstractBaseEntity {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Meal{" +
+               "id=" + id +
+               ", date=" + date +
+               ", name='" + name + '\'' +
+               ", price=" + price +
+               ", restaurant=" + restaurant +
+               '}';
     }
 }

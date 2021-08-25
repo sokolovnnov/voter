@@ -44,8 +44,8 @@ public class DataJpaMealRepo {
     }
 
     @Transactional
-    public void delete(int id) {
-        crudMealRepo.delete(id);
+    public boolean delete(int id) {
+        return crudMealRepo.delete(id) != 0;
     }
 
 }

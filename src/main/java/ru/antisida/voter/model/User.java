@@ -49,7 +49,7 @@ public class User extends AbstractBaseEntity{
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
 //    @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 200)
     @JoinColumn(name = "user_id") //https://stackoverflow.com/a/62848296/548473
@@ -148,5 +148,19 @@ public class User extends AbstractBaseEntity{
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", email='" + email + '\'' +
+               ", password='" + password + '\'' +
+               ", enabled=" + enabled +
+               ", dateTimeReg=" + dateTimeReg +
+               ", votes=" + votes +
+               ", roles=" + roles +
+               '}';
     }
 }

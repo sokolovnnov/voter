@@ -18,6 +18,4 @@ public class VoteResult {
         this.restaurantId = restaurantId;
         this.votesCount = votesCount;
     }
-
-
 }

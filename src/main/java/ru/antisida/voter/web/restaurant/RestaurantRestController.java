@@ -5,9 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import ru.antisida.voter.model.Restaurant;
 import ru.antisida.voter.service.RestaurantService;
 import ru.antisida.voter.to.Menu;
+import ru.antisida.voter.to.RestaurantTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,18 +20,18 @@ public class RestaurantRestController {
     private RestaurantService restaurantService;
 
     @GetMapping("/{id}")
-    public Restaurant get(@PathVariable("id") int id) {
+    public RestaurantTo get(@PathVariable("id") int id) {
         return restaurantService.get(id);
     }
 
     @GetMapping("/active")
-    public List<Restaurant> getActiveByDate(
+    public List<RestaurantTo> getActiveByDate(
             @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ld) {
         return restaurantService.getActiveByDate(ld);
     }
 
     @GetMapping
-    public List<Restaurant> getAll() {
+    public List<RestaurantTo> getAll() {
         return restaurantService.getAll();
     }
 

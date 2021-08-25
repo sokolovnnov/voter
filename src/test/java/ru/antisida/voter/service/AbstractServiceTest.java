@@ -1,13 +1,9 @@
 package ru.antisida.voter.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ru.antisida.voter.repo.JpaUtil;
 
 import static ru.antisida.voter.util.ValidationUtil.getRootCause;
 
@@ -19,7 +15,7 @@ import static ru.antisida.voter.util.ValidationUtil.getRootCause;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public abstract class AbstractServiceTest {
 
-    @Autowired
+  /*  @Autowired
     protected JpaUtil jpaUtil;
 
     @Autowired
@@ -33,7 +29,7 @@ public abstract class AbstractServiceTest {
         cacheManager.getCache("vote").clear();
         cacheManager.getCache("user").clear();
         jpaUtil.clear2ndLevelHibernateCache();
-    }
+    }*/
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {

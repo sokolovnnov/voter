@@ -13,6 +13,9 @@ import org.springframework.util.Assert;
 import ru.antisida.voter.AuthorizedUser;
 import ru.antisida.voter.model.User;
 import ru.antisida.voter.repo.datajpa.DataJpaUserRepo;
+import ru.antisida.voter.service.mappers.UserCreateToMapper;
+import ru.antisida.voter.service.mappers.UserMapper;
+import ru.antisida.voter.to.UserCreateTo;
 import ru.antisida.voter.to.UserTo;
 import ru.antisida.voter.util.ValidationUtil;
 
@@ -25,52 +28,49 @@ import static ru.antisida.voter.util.ValidationUtil.checkNotFoundWithId;
 public class UserService implements UserDetailsService {
 
     private final DataJpaUserRepo repo;
+    private final UserMapper userMapper;
+    private final UserCreateToMapper userCreateToMapper;
 
-    public UserService(DataJpaUserRepo repo) {
+    public UserService(DataJpaUserRepo repo, UserMapper userMapper, UserCreateToMapper userCreateToMapper) {
         this.repo = repo;
+        this.userMapper = userMapper;
+        this.userCreateToMapper = userCreateToMapper;
     }
 
-    @CacheEvict(value = "user", allEntries = true)
-    public User create(User user) {
-        Assert.notNull(user, "user must not be null");
-        return repo.save(user);
-    }
-
-    public User get(int id){
-        return checkNotFoundWithId(repo.get(id), id);
+    public UserTo get(int id) {
+        return userMapper.toTo(checkNotFoundWithId(repo.get(id), id));
     }
 
     @Cacheable("user")
-    public List<User> getAll(){
-        return repo.getAll();
-    }
-
-    public User save(User user){
-        return repo.save(user);
+    public List<UserTo> getAll() {
+        return userMapper.toTos(repo.getAll());
     }
 
     @CacheEvict(value = "user", allEntries = true)
-    public void delete(int id){
+    public UserTo create(UserCreateTo userCreateTo) {
+        Assert.notNull(userCreateTo, "user must not be null");
+        ValidationUtil.checkNew(userCreateTo);
+        User newUser = repo.save(userCreateToMapper.toEntity(userCreateTo));
+        return userMapper.toTo(newUser);
+    }
+
+    @CacheEvict(value = "user", allEntries = true)
+    public void delete(int id) {
         checkNotFoundWithId(repo.delete(id), id);
     }
 
     @CacheEvict(value = "user", allEntries = true)
-    public void update(User user) {
-        Assert.notNull(user, "user must not be null");
-        repo.save(user);
-    }
-
-    @CacheEvict(value = "user", allEntries = true)
     @Transactional
-    public void update(UserTo userTo) {
-        User user = get(userTo.id());
-        User updatedUser = UserTo.updateFromTo(user, userTo);
-        repo.save(updatedUser);   // !! need only for JDBC implementation
+    public void update(UserCreateTo userCreateTo, int id) {
+        Assert.notNull(userCreateTo, "user must not be null");
+        ValidationUtil.assureIdConsistent(userCreateTo, id);
+        User user = checkNotFoundWithId(repo.get(userCreateTo.id()), id);
+        userCreateToMapper.updateEntity(userCreateTo, user);
     }
 
-    public User getByEmail(String email) {
+    public UserTo getByEmail(String email) {
         Assert.notNull(email, "email must not be null");
-        return ValidationUtil.checkNotFound(repo.getByEmail(email), "email=" + email);
+        return userMapper.toTo(ValidationUtil.checkNotFound(repo.getByEmail(email), "email=" + email));
     }
 
     @Override

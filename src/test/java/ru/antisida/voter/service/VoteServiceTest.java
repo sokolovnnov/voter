@@ -1,10 +1,15 @@
 package ru.antisida.voter.service;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import ru.antisida.voter.RestaurantsTestData;
 import ru.antisida.voter.UserTestData;
 import ru.antisida.voter.model.Vote;
+import ru.antisida.voter.service.mappers.VoteMapper;
+import ru.antisida.voter.to.VoteTo;
 import ru.antisida.voter.util.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -19,79 +24,65 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Autowired
     private VoteService service;
 
-    @Test
-    void get() {
-        service.get(vote01Id, UserTestData.userId);
-        MATCHER.assertMatch(service.get(vote01Id, UserTestData.userId), vote01);
+    private static VoteMapper voteMapper;
+
+    @BeforeAll
+    static void init() {
+        voteMapper = VoteMapper.INSTANCE;
     }
 
-//    @Test
-//    void deactivate() {
-//        service.deactivate(vote01.id(), UserTestData.user.id());
-//        Vote deactivated = service.get(vote01.id(), UserTestData.user.id());
-//        MATCHER.assertMatch(deactivated, getDeactivated());
-//    }
+    @Test
+    void get() {
+        MATCHER.assertMatch(voteMapper.toEntity(service.get(vote01Id, UserTestData.userId)), vote01);
+    }
 
     @Test
+    @Transactional
     void create() {
-//        Vote d = service.create(
-//                new Vote(null, null,
-////                LocalDateTime.of(2021, Month.MAY, 21, 11, 57, 17),
-//                        10_000, UserTestData.user.id(), true ), 12000);
-        Vote created = service.create(getNew(), 12000);
+        VoteTo created = service.create(voteMapper.toTo(getNew()), UserTestData.userId);
         int id = created.getId();
         Vote newVote = getNew();
         newVote.setId(id);
-        MATCHER.assertMatch(created, newVote);
-        MATCHER.assertMatch(service.get(id, UserTestData.user.id()), newVote);
+        MATCHER.assertMatch(voteMapper.toEntity(created), newVote);
+        MATCHER.assertMatch(voteMapper.toEntity(service.get(id, UserTestData.userId)), newVote);
     }
 
     @Test
     void delete() {
-//        List<Vote> votes1 = service.getAll(UserTestData.admin.id()); //для проверки работы кэша
         service.delete(vote01.id());
-        Assertions.assertThrows(NotFoundException.class, () -> service.get(vote01.id(), UserTestData.user.id()));
-//        List<Vote> votes = service.getAll(UserTestData.admin.id());
-//        MATCHER.assertMatch(votes, vote01, vote02, vote03);
+        Assertions.assertThrows(NotFoundException.class, () -> service.get(vote01.id(), UserTestData.userId));
     }
 
     @Test
     void getAllByUser() {
-        List<Vote> votes = service.getAllByUser(UserTestData.user.id());
-        MATCHER.assertMatch(votes, vote01, vote03);
+        List<Vote> votes = voteMapper.toListEntity(service.getAllByUser(UserTestData.userId));
+        MATCHER.assertMatch(votes, vote00, vote01, vote03);
     }
 
     @Test
     void getAllActiveByDate() {
-        List<Vote> votes = service.getAllActiveByDate(LocalDate.of(2021, Month.MAY, 21));
+        List<Vote> votes = voteMapper.toListEntity(service.getAllActiveByDate(LocalDate.of(2021, Month.MAY,
+                21)));
         MATCHER.assertMatch(votes, vote01, vote02);
     }
 
     @Test
     void getLastByUser() {
-        MATCHER.assertMatch(service.getActiveByUserByDate(
-                UserTestData.userId, LocalDate.of(2021, Month.JUNE, 21)),
+        MATCHER.assertMatch(voteMapper.toEntity(
+                service.getActiveByUserByDate(UserTestData.userId, LocalDate.of(2021, Month.JUNE, 21))),
                 vote03);
     }
 
     @Test
     void getAll() {
-        List<Vote> votes = service.getAll(UserTestData.admin.id());
-        MATCHER.assertMatch(votes, vote01, vote02, vote03);
+        List<Vote> votes = voteMapper.toListEntity(service.getAll());
+        MATCHER.assertMatch(votes, vote00, vote01, vote02, vote03);
     }
 
     @Test
-    void createWithException1()  {
-//        Vote v = service.get(1000, 12000);
-//        Vote v1 =
-//        service.create(new Vote(null, null,
-//                        10_000, UserTestData.user.id(), true ), 12000);
-//        int id = v1.id();
-//        Vote v2 = service.get(id, 12000);
-//        System.out.println(v2.getLocalDateTime());
+    void createWithException1() {
         validateRootCause(ConstraintViolationException.class, () -> service.create(
-                new Vote(null, null,
-                10_000, UserTestData.user.id(), true ), 12000));
-
+                voteMapper.toTo(new Vote(null, null, RestaurantsTestData.RESTAURANT_1, UserTestData.user, true)),
+                12000));
     }
 }

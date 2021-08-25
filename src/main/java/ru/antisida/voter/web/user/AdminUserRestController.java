@@ -6,10 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.antisida.voter.model.User;
 import ru.antisida.voter.service.UserService;
+import ru.antisida.voter.to.UserCreateTo;
 import ru.antisida.voter.to.UserTo;
-import ru.antisida.voter.util.ValidationUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -22,18 +21,18 @@ public class AdminUserRestController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAll() {
+    public List<UserTo> getAll() {
         return userService.getAll();
     }
 
     @GetMapping("/{id}")
-    public User get(@PathVariable int id) {
+    public UserTo get(@PathVariable int id) {
         return userService.get(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> create(@RequestBody User user) {
-        User created = userService.create(user);
+    public ResponseEntity<UserTo> create(@RequestBody UserCreateTo userCreateTo) {
+        UserTo created = userService.create(userCreateTo);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/rest/admin/user/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -49,15 +48,12 @@ public class AdminUserRestController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo, @PathVariable int id) {
-        User user = get(userTo.id());
-        User updated = UserTo.updateFromTo(user, userTo);
-        ValidationUtil.assureIdConsistent(updated, 12000);
-        userService.update(user);
+    public void update(@RequestBody UserCreateTo userCreateTo, @PathVariable int id) {
+        userService.update(userCreateTo, id);
     }
 
     @GetMapping("/by")
-    public User getByMail(@RequestParam String email) {
+    public UserTo getByMail(@RequestParam String email) {
         return userService.getByEmail(email);
     }
 
@@ -65,6 +61,4 @@ public class AdminUserRestController {
     public String testUTF() {
         return "Русский текст";
     }
-
-
 }

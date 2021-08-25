@@ -20,14 +20,8 @@ public class Restaurant extends AbstractBaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)//todo доделать
-    //@JoinColumn(name = "restaurant_id") //fixme ЗАЧЕМ ресторану его еда?
+    //@JoinColumn(name = "restaurant_id") //fixme ЗАЧЕМ ресторану его еда? Может быть меню? А Может и меню не надо
     private List<Meal> meals;
-//
-//    private Integer voteSum;//todo сумма сегодняшних голосов она тут не нужна
-//
-//    @OneToMany(fetch = FetchType.LAZY)//todo... ЗАЧЕМ РЕСТОРАНУ ЕГО ГОЛОСА???
-//    @JoinColumn(name = "restaurant_id")
-//    private List<Vote> vote;
 
     public Restaurant(){}
 
@@ -51,5 +45,13 @@ public class Restaurant extends AbstractBaseEntity {
 
     public boolean isNew() {
         return this.id == null;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               '}';
     }
 }
